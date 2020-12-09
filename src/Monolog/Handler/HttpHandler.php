@@ -26,16 +26,18 @@ class HttpHandler extends AbstractProcessingHandler
 
     protected $url;
     protected $token;
+    protected $index;
 
     protected $tag = array();
 
-    public function __construct($url, $token, $level = Logger::DEBUG, $bubble = true)
+    public function __construct($url, $token, $index, $level = Logger::DEBUG, $bubble = true)
     {
         if (!extension_loaded('curl')) {
-            throw new \LogicException('The curl extension is needed to use the LogglyHandler');
+            throw new \LogicException('The curl extension is needed to use the HttpHandler');
         }
         $this->url = $url;
         $this->token = $token;
+        $this->index = $index;
 
         parent::__construct($level, $bubble);
     }
@@ -63,16 +65,23 @@ class HttpHandler extends AbstractProcessingHandler
         $headers = array('Content-Type: application/json');
 
         if (!empty($this->token)) {
-            $headers[] = 'Authorization : Bearer '.$this->token;
+            $headers[] = 'Authorization: Bearer '.$this->token;
         }
+
+        $data_http=json_encode(
+                        [ 'index' => $this->index,
+                          'log' => json_decode($data,true) ]
+                        );
+        $headers[] = 'Content-Length: '.strlen($data_http);
 
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $this->url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_http);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 
         Curl\Util::execute($ch);
     }
