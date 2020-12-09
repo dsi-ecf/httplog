@@ -1,8 +1,12 @@
 {
-    "name": "monolog/monolog",
+    "name": "dsi-ecf/monolog",
     "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-    "keywords": ["log", "logging", "psr-3"],
-    "homepage": "http://github.com/Seldaek/monolog",
+    "keywords": [
+        "log",
+        "logging",
+        "psr-3"
+    ],
+    "homepage": "https://github.com/dsi-ecf/monolog",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -10,6 +14,11 @@
             "name": "Jordi Boggiano",
             "email": "j.boggiano@seld.be",
             "homepage": "http://seld.be"
+        },
+        {
+            "name": "Laurent Glesner",
+            "email": "l.glesner@gmail.com",
+            "homepage": ""
         }
     ],
     "require": {
@@ -42,10 +51,14 @@
         "php-console/php-console": "Allow sending log messages to Google Chrome"
     },
     "autoload": {
-        "psr-4": {"Monolog\\": "src/Monolog"}
+        "psr-4": {
+            "Monolog\\": "src/Monolog"
+        }
     },
     "autoload-dev": {
-        "psr-4": {"Monolog\\": "tests/Monolog"}
+        "psr-4": {
+            "Monolog\\": "tests/Monolog"
+        }
     },
     "provide": {
         "psr/log-implementation": "1.0.0"
